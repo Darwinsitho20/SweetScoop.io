@@ -1,0 +1,1047 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>SweetScoop Heladería</title>
+<style>
+  :root {
+    --primary:#ff6fa7;
+    --secondary:#ffd1e0;
+    --accent:#8de0c1;
+    --bg:#fff7fc;
+    --card-bg:#ffffff;
+    --radius:16px;
+    --shadow:0 15px 40px -10px rgba(255,111,167,0.25);
+    font-family: 'Poppins', system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    background:linear-gradient(135deg,#fff7fc 0%,#ffe7f0 80%);
+    color:#2c2c38;
+    min-height:100%;
+    line-height:1.4;
+  }
+  header{
+    padding:1rem 1.25rem;
+    display:flex;
+    flex-wrap:wrap;
+    align-items:center;
+    justify-content:space-between;
+    gap:10px;
+    position:sticky;
+    top:0;
+    background:#ffffffcc;
+    z-index:10;
+    border-bottom:2px solid var(--primary);
+    box-shadow:0 10px 30px -5px rgba(0,0,0,0.05);
+  }
+  .logo{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    font-weight:700;
+    font-size:1.5rem;
+    letter-spacing:1px;
+    color:#ff6fa7;
+  }
+  .logo .dot{background:var(--primary);width:10px;height:10px;border-radius:50%;margin-left:4px;}
+  nav{
+    display:flex;
+    gap:12px;
+    flex-wrap:wrap;
+    align-items:center;
+  }
+  nav button{
+    background:none;
+    border:2px solid var(--primary);
+    padding:8px 14px;
+    border-radius:999px;
+    cursor:pointer;
+    font-weight:600;
+    color:var(--primary);
+    position:relative;
+    overflow:hidden;
+    transition:0.3s;
+  }
+  nav button:hover{
+    background:var(--primary);
+    color:#fff;
+  }
+  .badge{
+    background:#ff3b30;
+    border-radius:50%;
+    padding:4px 9px;
+    font-size:0.6rem;
+    position:absolute;
+    top:-4px;
+    right:-4px;
+    font-weight:700;
+    color:#fff;
+  }
+  .hero{
+    padding:2rem 1.25rem;
+    display:flex;
+    flex-wrap:wrap;
+    gap:1.5rem;
+    align-items:center;
+    justify-content:space-between;
+    position:relative;
+  }
+  .hero-text{
+    flex:1 1 320px;
+    max-width:600px;
+  }
+  .hero-text h1{
+    margin:0;
+    font-size:2.8rem;
+    line-height:1.1;
+  }
+  .hero-text p{
+    margin:0.75rem 0 1rem;
+    font-size:1rem;
+  }
+  .btn-primary{
+    background:var(--primary);
+    border:none;
+    padding:14px 24px;
+    border-radius:999px;
+    cursor:pointer;
+    font-weight:700;
+    letter-spacing:1px;
+    display:inline-flex;
+    align-items:center;
+    gap:6px;
+    transition:0.2s;
+    color:#fff;
+    text-decoration:none;
+  }
+  .btn-primary:hover{
+    filter:brightness(1.05);
+  }
+  .hero-image{
+    flex:1 1 300px;
+    min-width:240px;
+    position:relative;
+  }
+  .hero-image img{
+    width:100%;
+    border-radius:20px;
+    display:block;
+    object-fit:cover;
+    box-shadow: var(--shadow);
+    border:6px solid var(--secondary);
+  }
+  .ad-section{
+    margin:1rem auto;
+    padding:1rem;
+    display:flex;
+    flex-wrap:wrap;
+    gap:1rem;
+    justify-content:center;
+  }
+  .ad-card{
+    background:var(--card-bg);
+    flex:1 1 260px;
+    border-radius:16px;
+    padding:1rem;
+    position:relative;
+    overflow:hidden;
+    box-shadow: 0 20px 50px -10px rgba(255,111,167,0.2);
+    min-width:220px;
+    border:2px dashed var(--accent);
+  }
+  .ad-card h3{
+    margin-top:0;
+    font-size:1.25rem;
+    color: #ff6fa7;
+  }
+  .ad-badge{
+    position:absolute;
+    top:12px;
+    right:12px;
+    background: var(--accent);
+    padding:6px 12px;
+    border-radius:999px;
+    font-weight:700;
+    font-size:0.65rem;
+    color:#0f111a;
+  }
+  .products{
+    padding:1rem 1.25rem 2rem;
+    max-width:1200px;
+    margin:0 auto;
+  }
+  .controls{
+    display:flex;
+    flex-wrap:wrap;
+    gap:12px;
+    margin-bottom:12px;
+    align-items:center;
+    justify-content:center;
+  }
+  .filter-btn{
+    background:none;
+    border:2px solid var(--primary);
+    padding:6px 16px;
+    border-radius:999px;
+    cursor:pointer;
+    font-weight:600;
+    color:var(--primary);
+    transition:0.2s;
+  }
+  .filter-btn.active, .filter-btn:hover{
+    background:var(--primary);
+    color:#fff;
+    border-color:var(--primary);
+  }
+  .search-input{
+    padding:10px 16px;
+    border-radius:999px;
+    border:2px solid var(--accent);
+    outline:none;
+    font-size:0.95rem;
+    flex:1 1 220px;
+    max-width:320px;
+    background:#fff;
+  }
+  .products-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+    gap:1rem;
+  }
+  .product-card{
+    background:var(--card-bg);
+    border-radius:16px;
+    padding:12px;
+    position:relative;
+    display:flex;
+    flex-direction:column;
+    transition:transform .2s;
+    box-shadow: 0 15px 40px -5px rgba(255,111,167,0.15);
+    border:1px solid #ffe3ee;
+  }
+  .product-card:hover{
+    transform:translateY(-5px);
+  }
+  .product-img{
+    width:100%;
+    aspect-ratio:1/1;
+    overflow:hidden;
+    border-radius:12px;
+    margin-bottom:8px;
+    background: #fff0f7;
+  }
+  .product-img img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    display:block;
+    border-radius:10px;
+  }
+  .product-info{
+    flex:1;
+    display:flex;
+    flex-direction:column;
+    gap:6px;
+  }
+  .product-info h4{
+    margin:4px 0 0;
+    font-size:1.1rem;
+  }
+  .price{
+    font-weight:700;
+    margin:4px 0;
+    color:#d6336c;
+  }
+  .btn-add{
+    margin-top:auto;
+    background: var(--accent);
+    border:none;
+    padding:10px;
+    border-radius:8px;
+    cursor:pointer;
+    font-weight:600;
+    color:#0f111a;
+    display:flex;
+    justify-content:center;
+    gap:6px;
+    transition:0.2s;
+  }
+  .btn-add:hover{
+    filter:brightness(1.05);
+  }
+  .cart-modal, .sales-log, .admin-panel, .impact-modal{
+    position:fixed;
+    top:0;
+    left:0;
+    right:0;
+    bottom:0;
+    background:rgba(255,245,251,0.95);
+    display:none;
+    z-index:60;
+    padding:1rem;
+    overflow:auto;
+  }
+  .modal-inner{
+    max-width:950px;
+    margin:0 auto;
+    background:#ffffff;
+    border-radius:16px;
+    padding:1rem 1.5rem 2rem;
+    position:relative;
+    box-shadow:0 25px 60px -10px rgba(255,111,167,0.2);
+  }
+  .close-btn{
+    position:absolute;
+    top:10px;
+    right:10px;
+    background:none;
+    border:none;
+    font-size:1.3rem;
+    cursor:pointer;
+    color:var(--primary);
+  }
+  table{
+    width:100%;
+    border-collapse:collapse;
+    font-size:0.9rem;
+    margin-bottom:1rem;
+  }
+  th, td{
+    padding:10px 8px;
+    text-align:left;
+    border-bottom:1px solid rgba(255,111,167,0.1);
+  }
+  th{
+    background:rgba(255,111,167,0.07);
+    position:sticky;
+    top:0;
+  }
+  .btn-secondary{
+    background:none;
+    border:2px solid var(--primary);
+    padding:8px 16px;
+    border-radius:8px;
+    cursor:pointer;
+    font-weight:600;
+    color:var(--primary);
+    margin-right:6px;
+    transition:0.2s;
+  }
+  .btn-secondary:hover{
+    background:var(--primary);
+    color:#fff;
+  }
+  .sales-footer{
+    display:flex;
+    gap:12px;
+    flex-wrap:wrap;
+    align-items:center;
+    margin-top:12px;
+  }
+  .tagline{
+    background:var(--secondary);
+    padding:6px 12px;
+    border-radius:8px;
+    display:inline-block;
+    font-size:0.75rem;
+    margin-bottom:6px;
+    color:#d6336c;
+  }
+  .highlight{
+    background:linear-gradient(90deg,var(--primary),var(--accent));
+    -webkit-background-clip:text;
+    -webkit-text-fill-color:transparent;
+  }
+  footer{
+    padding:1.5rem 1.25rem;
+    text-align:center;
+    font-size:0.75rem;
+    margin-top:40px;
+    background:rgba(255,230,240,0.8);
+    display:flex;
+    flex-wrap:wrap;
+    gap:16px;
+    justify-content:space-between;
+    border-top:2px solid var(--primary);
+  }
+  .socials{
+    display:flex;
+    gap:12px;
+    flex-wrap:wrap;
+    flex-direction:column;
+    align-items:center;
+  }
+  .pill{
+    background:rgba(255,111,167,0.1);
+    padding:6px 12px;
+    border-radius:999px;
+    display:inline-block;
+    font-size:0.65rem;
+    margin:2px;
+    border:1px solid var(--primary);
+  }
+  .pill a{text-decoration:none;color:var(--primary);}
+  .social-row {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 6px;
+  }
+  .social-icon {
+    width: 38px;
+    height: 38px;
+    background: #ffe7f5;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    flex: 0 0 auto;
+    position: relative;
+    transition: transform .2s;
+    border:2px solid var(--primary);
+  }
+  .social-icon:hover {
+    transform: scale(1.1);
+  }
+  .social-icon img {
+    width: 65%;
+    height: 65%;
+    object-fit:contain;
+    display: block;
+  }
+  .admin-header{
+    display:flex;
+    gap:12px;
+    flex-wrap:wrap;
+    align-items:center;
+    margin-bottom:12px;
+  }
+  .admin-toggle{
+    background:none;
+    border:2px solid var(--primary);
+    padding:6px 14px;
+    border-radius:999px;
+    cursor:pointer;
+    font-weight:600;
+    color:var(--primary);
+  }
+  .payment-box{
+    background:rgba(255,245,251,1);
+    padding:12px;
+    border-radius:10px;
+    display:flex;
+    gap:12px;
+    flex-wrap:wrap;
+    margin-top:8px;
+    border:2px dashed var(--accent);
+  }
+  .payment-method{
+    flex:1;
+    min-width:180px;
+    background:linear-gradient(135deg,var(--secondary),#ffe3ee);
+    padding:14px;
+    border-radius:12px;
+    position:relative;
+    box-shadow:0 15px 40px -10px rgba(141,224,193,0.3);
+  }
+  .payment-method h4{
+    margin:0 0 6px;
+    color:#d6336c;
+  }
+  .badge-new{
+    background:#ff9ecd;
+    padding:4px 8px;
+    border-radius:6px;
+    font-size:0.55rem;
+    position:absolute;
+    top:8px;
+    right:8px;
+  }
+  .impact-chart-wrapper{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:14px;
+    margin-top:10px;
+  }
+  .impact-legend{
+    display:flex;
+    gap:18px;
+    flex-wrap:wrap;
+    justify-content:center;
+    margin-top:4px;
+  }
+  .impact-box{
+    background:rgba(255,245,251,1);
+    padding:12px;
+    border-radius:10px;
+    width:100%;
+    max-width:600px;
+    text-align:center;
+    border:1px solid var(--primary);
+  }
+  .location-section{
+    background:rgba(255, 242, 250,0.8);
+    padding:20px;
+    border-radius:16px;
+    margin:20px auto;
+    max-width:1000px;
+    border:2px dashed var(--primary);
+  }
+  .location-header{
+    display:flex;
+    gap:12px;
+    flex-wrap:wrap;
+    align-items:center;
+    margin-bottom:10px;
+  }
+  @media (max-width:950px){
+    .hero-text h1{
+      font-size:2.3rem;
+    }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">
+    SweetScoop <div class="dot"></div>
+  </div>
+  <nav>
+    <button onclick="scrollToSection('products')">Sabores</button>
+    <button onclick="openCart()">Carrito <span class="badge" id="cart-count">0</span></button>
+    <button onclick="openSalesLog()">Ventas</button>
+    <button class="admin-toggle" onclick="toggleAdmin()">Admin</button>
+    <button onclick="window.scrollTo({top:0, behavior:'smooth'})">Inicio</button>
+  </nav>
+</header>
+
+<section class="hero" id="inicio">
+  <div class="hero-text">
+    <div class="tagline">Dulces momentos, sonrisas infinitas</div>
+    <h1><span class="highlight">SweetScoop</span> Helados Artesanales</h1>
+    <p>16 sabores irresistibles. Para niños, niñas y todos los que aman el mundo rosa y cremoso. Desde la ubicación en <strong>Antioquia</strong> hasta el favorito <strong>Fresa con crema</strong>.</p>
+    <button class="btn-primary" onclick="scrollToSection('products')">Ver sabores</button>
+  </div>
+  <div class="hero-image">
+    <img src="https://us.123rf.com/450wm/studioaccendo/studioaccendo2309/studioaccendo230927418/213147976-colorful-ice-cream-scoops-of-different-colors-and-flavours-in-plastic-cups.jpg" alt="Helados coloridos">
+  </div>
+</section>
+
+<section class="ad-section">
+  <div class="ad-card">
+    <div class="ad-badge">Ubicación</div>
+    <h3>Antioquia</h3>
+    <p>Visítanos en Antioquia, el corazón dulce de la región. Aquí puedes ver dónde estamos y cómo llegar.</p>
+    <a class="btn-primary" href="https://www.google.com/maps/search/Antioquia+Colombia" target="_blank" rel="noopener">Ver ubicación</a>
+  </div>
+  <div class="ad-card">
+    <div class="ad-badge">Especial</div>
+    <h3>Fresa con Crema</h3>
+    <p>Fresas frescas, helado suave y un toque de crema batida en rosa. Amanecido en cada bocado.</p>
+    <a class="btn-primary" href="pagina.html">Ver más</a>
+  </div>
+  <div class="ad-card">
+    <div class="ad-badge">Impacto</div>
+    <h3>Impacto de Ventas</h3>
+    <p>Monitorea en tiempo real cómo las ventas se traducen en acciones solidarias para niños.</p>
+    <button class="btn-primary" onclick="openImpact()">Ver impacto</button>
+  </div>
+</section>
+
+<!-- Sección de Antioquia -->
+<section class="location-section" id="antioquía">
+  <div class="location-header">
+    <div style="flex:1;">
+      <h2 style="margin:0;color: #ff6fa7;">Nuestra Ubicación: Antioquía</h2>
+      <p style="margin:4px 0;">SweetScoop tiene su sede principal en Medellín. Aquí atendemos con helados artesanales, eventos solidarios y programas infantiles.</p>
+    </div>
+  </div>
+  <div style="display:flex; gap:20px; flex-wrap:wrap;">
+    <div style="flex:1; min-width:280px;">
+      <strong>Dirección:</strong> Calle Dulce 123, Medellín, Antioquía<br>
+      <strong>Horario:</strong> Lunes a Domingo, 10:00 AM - 9:00 PM<br>
+      <strong>Contacto WhatsApp:</strong> <a href="https://wa.me/573234202808" target="_blank">+57 323 420 2808</a>
+    </div>
+    <div style="flex:1; min-width:280px;">
+      <strong>Eventos solidarios:</strong> Cada mes se destina parte de las ventas a llevar helados gratuitos a niños en zonas vulnerables. <br>
+      <strong>Redes:</strong> Instagram, X y WhatsApp para que te conectes fácilmente.
+    </div>
+  </div>
+</section>
+
+<section class="products" id="products">
+  <h2 style="text-align:center; margin-bottom:6px;">Nuestros Sabores</h2>
+  <p style="text-align:center; margin:0 0 14px;">Helados artesanales con enfoque dulce y femenino. Elige, agrega al carrito y disfruta.</p>
+  <div class="controls">
+    <div>
+      <button class="filter-btn active" data-cat="Todos" onclick="applyFilter(this)">Todos</button>
+      <button class="filter-btn" data-cat="Cremosos" onclick="applyFilter(this)">Cremosos</button>
+      <button class="filter-btn" data-cat="Frutales" onclick="applyFilter(this)">Frutales</button>
+      <button class="filter-btn" data-cat="Especiales" onclick="applyFilter(this)">Especiales</button>
+    </div>
+    <input class="search-input" placeholder="Buscar sabor..." oninput="applySearch(this.value)" />
+  </div>
+  <div class="products-grid" id="product-grid"></div>
+
+  <div class="payment-box">
+    <div class="payment-method">
+      <div class="badge-new">Pago</div>
+      <h4>Pagar con MercadoPago</h4>
+      <p>Serás llevado a la pasarela oficial de MercadoPago Colombia.</p>
+      <button class="btn-primary" onclick="window.open('https://www.mercadopago.com.co/','_blank')">Ir a MercadoPago</button>
+    </div>
+    <div class="payment-method">
+      <div class="badge-new">Pago</div>
+      <h4>Pagar con PayU</h4>
+      <p>Serás llevado a la plataforma de PayU Colombia.</p>
+      <button class="btn-primary" onclick="window.open('https://www.payu.com.co/','_blank')">Ir a PayU</button>
+    </div>
+  </div>
+</section>
+
+<!-- Impacto Modal -->
+<div class="impact-modal" id="impact-modal">
+  <div class="modal-inner">
+    <button class="close-btn" onclick="closeImpact()">✕</button>
+    <h2>Impacto de Ventas</h2>
+    <div class="impact-box">
+      <p>Del total de ventas, el <strong>10%</strong> se destina a actividades solidarias con niños. Aquí ves cómo se distribuye.</p>
+      <div class="impact-chart-wrapper">
+        <canvas id="impact-chart" width="300" height="300"></canvas>
+        <div class="impact-legend">
+          <div><span style="display:inline-block;width:12px;height:12px;background:var(--primary);margin-right:6px;border-radius:3px;"></span>Donación (10%)</div>
+          <div><span style="display:inline-block;width:12px;height:12px;background:var(--accent);margin-right:6px;border-radius:3px;"></span>Ingreso restante</div>
+        </div>
+        <div id="impact-values" style="margin-top:8px;font-size:0.9rem;"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Carrito Modal -->
+<div class="cart-modal" id="cart-modal">
+  <div class="modal-inner">
+    <button class="close-btn" onclick="closeCart()">✕</button>
+    <h2>Carrito de Compras</h2>
+    <div id="cart-contents"></div>
+    <div class="sales-footer">
+      <div><strong>Total:</strong> <span id="cart-total">COP $0</span></div>
+      <div style="margin-left:auto;">
+        <button class="btn-secondary" onclick="clearCart()">Vaciar carrito</button>
+        <button class="btn-primary" onclick="checkout()">Registrar venta</button>
+      </div>
+    </div>
+    <small>Las ventas quedan guardadas y puedes ver el historial en "Ventas".</small>
+  </div>
+</div>
+
+<!-- Ventas -->
+<div class="sales-log" id="sales-log">
+  <div class="modal-inner">
+    <button class="close-btn" onclick="closeSalesLog()">✕</button>
+    <h2>Historial de Ventas</h2>
+    <div id="sales-contents"></div>
+    <div style="margin-top:8px;">
+      <button class="btn-secondary" onclick="downloadSalesLog()">Exportar (JSON)</button>
+      <button class="btn-secondary" onclick="clearSalesLog()">Limpiar historial</button>
+    </div>
+    <small style="display:block; margin-top:6px;">Cada venta guarda sabores, cantidades, total y fecha/hora.</small>
+  </div>
+</div>
+
+<!-- Admin Panel -->
+<div class="admin-panel" id="admin-panel">
+  <div class="modal-inner">
+    <button class="close-btn" onclick="toggleAdmin()">✕</button>
+    <h2>Panel de Administración</h2>
+    <div class="admin-header">
+      <div class="btn-secondary" onclick="renderAdminProducts()">Gestionar Sabores</div>
+      <div class="btn-secondary" onclick="renderAdminSales()">Historial de Ventas</div>
+    </div>
+    <div id="admin-contents"></div>
+  </div>
+</div>
+
+<footer>
+  <div>
+    <div style="font-weight:700; font-size:1rem;">SweetScoop Heladería</div>
+    <div>Helados artesanales, con amor y solidaridad.</div>
+  </div>
+  <div class="socials">
+    <div class="social-row">
+      <a class="social-icon" href="https://www.instagram.com" target="_blank" rel="noopener" aria-label="Instagram">
+        <img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/instagram.svg" alt="Instagram logo" />
+      </a>
+      <a class="social-icon" href="https://x.com" target="_blank" rel="noopener" aria-label="X">
+        <img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/x.svg" alt="X logo" />
+      </a>
+      <a class="social-icon" href="https://wa.me/573234202808" target="_blank" rel="noopener" aria-label="WhatsApp">
+        <img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/whatsapp.svg" alt="WhatsApp logo" />
+      </a>
+    </div>
+    <div>
+      <div class="pill"><a href="https://www.instagram.com" target="_blank" rel="noopener">Instagram</a></div>
+      <div class="pill"><a href="https://x.com" target="_blank" rel="noopener">X</a></div>
+      <div class="pill"><a href="https://wa.me/573234202808" target="_blank" rel="noopener">WhatsApp</a></div>
+    </div>
+  </div>
+  <div>
+    <div>&copy; 2025 SweetScoop. Todos los derechos reservados.</div>
+    <div style="margin-top:4px;">Proyecto solidario y divertido.</div>
+  </div>
+</footer>
+
+<script>
+// Sabores (16) con precios en COP simulados
+const products = [
+  {id:1,name:"Chococono",price: Math.round(12 * 4200),img:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSyYILzohqVCMm8TXqOnwDD_ZCyTIQyPan_Uw&s",category:"Especiales"},
+  {id:2,name:"Fresa con crema",price: Math.round(10 * 4200),img:"https://animalgourmet.com/wp-content/uploads/2024/03/Crema-para-fresas-con-crema1-jpg.webp",category:"Cremosos"},
+  {id:3,name:"Vainilla suave",price: Math.round(8 * 4200),img:"https://m.media-amazon.com/images/I/71ixhkxlxML._SL1500_.jpg",category:"Cremosos"},
+  {id:4,name:"Chocolate brillante",price: Math.round(9 * 4200),img:"https://thumbs.dreamstime.com/b/helado-de-almendras-chocolate-sobre-mesa-m%C3%A1rmol-con-nieve-brillante-fondo-comida-vacaciones-invierno-158836505.jpg",category:"Cremosos"},
+  {id:5,name:"Mango tropical",price: Math.round(11 * 4200),img:"https://es.riverheadlocal.com/wp-content/uploads/2018/07/receta1.jpg",category:"Frutales"},
+  {id:6,name:"Kiwi fresco",price: Math.round(11 * 4200),img:"https://www.hola.com/horizon/landscape/4721cfa50b35-adobestock1519373009.jpg?im=Resize=(360),type=downsize",category:"Frutales"},
+  {id:7,name:"Blueberry dream",price: Math.round(12 * 4200),img:"https://thumbs.dreamstime.com/b/delicioso-helado-de-morado-azul-en-un-fondo-lavanda-una-opci%C3%B3n-postres-dulce-y-refrescante-para-sofisticado-atm%C3%B3sfera-generada-361803761.jpg",category:"Frutales"},
+  {id:8,name:"Galleta con crema",price: Math.round(13 * 4200),img:"https://media.istockphoto.com/id/688427916/es/foto/galletas-y-helado-de-crema.jpg?s=612x612&w=0&k=20&c=_ZBXVv4csegT8DcPVTKIQyNMuCp3DXf9kLZ0oVWOt44=",category:"Especiales"},
+  {id:9,name:"Caramelo salado",price: Math.round(14 * 4200),img:"https://cocinandosanoo.com/wp-content/uploads/2021/07/Helado-de-caramelo-salado.jpg",category:"Especiales"},
+  {id:10,name:"Limonada frozen",price: Math.round(10 * 4200),img:"https://www.infobae.com/new-resizer/DC_o9a_WWeEuFAhjL1am0SpifwA=/arc-anglerfish-arc2-prod-infobae/public/CLWWVAIRGJF4FG4ATXCV7YZZLQ.jpg",category:"Frutales"},
+  {id:11,name:"Coco dulce",price: Math.round(11 * 4200),img:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQuFhbEvvfp6eXTy64jLvoSEUCoGjEQCcFrFQ&s",category:"Cremosos"},
+  {id:12,name:"Dulce de leche",price: Math.round(13 * 4200),img:"https://www.clarin.com/img/2019/10/11/MdLwHWmS_360x240__1.jpg",category:"Cremosos"},
+  {id:13,name:"Frambuesa brillante",price: Math.round(12 * 4200),img:"https://easyways.cl/storage/20211013122155helado-de-frambuesas.jpg",category:"Frutales"},
+  {id:14,name:"Maracuyá",price: Math.round(11 * 4200),img:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRX29vxO8xonSRSfWPGHg491oylI5EnkX9dGg&s",category:"Frutales"},
+  {id:15,name:"Oreo fantasy",price: Math.round(14 * 4200),img:"https://i.ytimg.com/vi/pFjT_E6QnQI/hq720.jpg?sqp=-oaymwEhCK4FEIIDSFryq4qpAxMIARUAAAAAGAElAADIQj0AgKJD&rs=AOn4CLAad7gR2Pf3uVcxTfQ_eP_lPjMANQ",category:"Especiales"},
+  {id:16,name:"Bubblegum",price: Math.round(10 * 4200),img:"https://previews.123rf.com/images/foodandmore/foodandmore1703/foodandmore170300031/73406744-close-up-still-life-of-single-scoop-of-bright-blue-bubblegum-flavored-ice-cream-with-colorful.jpg",category:"Especiales"},
+];
+
+// persistencia
+function getCart(){ return JSON.parse(localStorage.getItem('ss_cart')||'[]'); }
+function saveCart(c){ localStorage.setItem('ss_cart', JSON.stringify(c)); }
+function getSales(){ return JSON.parse(localStorage.getItem('ss_sales')||'[]'); }
+function saveSales(s){ localStorage.setItem('ss_sales', JSON.stringify(s)); }
+function updateCartBadge(){
+  const cart = getCart();
+  const totalItems = cart.reduce((s,i)=>s+i.qty,0);
+  document.getElementById('cart-count').textContent=totalItems;
+}
+
+// filtros y búsqueda
+let currentCategory = "Todos";
+let currentSearch = "";
+function applyFilter(btn){
+  document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  currentCategory = btn.dataset.cat;
+  renderProducts();
+}
+function applySearch(term){
+  currentSearch = term.trim().toLowerCase();
+  renderProducts();
+}
+function filterAndSearch(p){
+  const matchCat = currentCategory === "Todos" || p.category === currentCategory;
+  const matchSearch = !currentSearch || p.name.toLowerCase().includes(currentSearch);
+  return matchCat && matchSearch;
+}
+
+// render productos
+function renderProducts() {
+  const grid = document.getElementById('product-grid');
+  grid.innerHTML = '';
+  products.filter(filterAndSearch).forEach(p => {
+    const card = document.createElement('div');
+    card.className='product-card';
+    card.innerHTML=`
+      <div class="product-img">
+        <img src="${p.img}" alt="${p.name}">
+      </div>
+      <div class="product-info">
+        <div class="tagline">${p.category}</div>
+        <h4>${p.name}</h4>
+        <div class="price">COP $${p.price.toLocaleString()}</div>
+        <div style="display:flex; gap:6px; flex-wrap:wrap; margin-top:4px;">
+          <button class="btn-add" onclick="addToCart(${p.id})">➕ Agregar</button>
+        </div>
+      </div>
+    `;
+    grid.appendChild(card);
+  });
+}
+
+// carrito
+function addToCart(id){
+  const cart = getCart();
+  const prod = products.find(p=>p.id===id);
+  if(!prod) return;
+  const existing = cart.find(c=>c.id===id);
+  if(existing) existing.qty +=1;
+  else cart.push({id:prod.id,name:prod.name,price:prod.price,qty:1});
+  saveCart(cart);
+  updateCartBadge();
+  alert(`${prod.name} agregado al carrito.`);
+}
+function openCart(){ renderCartContents(); document.getElementById('cart-modal').style.display='block'; }
+function closeCart(){ document.getElementById('cart-modal').style.display='none'; }
+function renderCartContents(){
+  const container = document.getElementById('cart-contents');
+  const cart = getCart();
+  if(cart.length===0){ container.innerHTML='<p>El carrito está vacío.</p>'; }
+  else {
+    let html = `<table><thead><tr><th>Sabor</th><th>Precio</th><th>Cantidad</th><th>Subtotal</th><th>Acción</th><th>Recibo</th></tr></thead><tbody>`;
+    cart.forEach(item=>{
+      html+=`<tr>
+        <td>${item.name}</td>
+        <td>COP $${item.price.toLocaleString()}</td>
+        <td>
+          <button onclick="changeQty(${item.id}, -1)" style="padding:4px 8px; margin-right:4px;">−</button>
+          ${item.qty}
+          <button onclick="changeQty(${item.id}, 1)" style="padding:4px 8px; margin-left:4px;">+</button>
+        </td>
+        <td>COP $${(item.price*item.qty).toLocaleString()}</td>
+        <td><button onclick="removeItem(${item.id})" style="background:#ff6fa7;border:none;color:#fff;padding:6px 10px;border-radius:6px;cursor:pointer;">Eliminar</button></td>
+        <td><button onclick="printItemReceipt(${item.id})" style="background:#8de0c1;border:none;color:#0f111a;padding:6px 10px;border-radius:6px;cursor:pointer;">Imprimir</button></td>
+      </tr>`;
+    });
+    html+=`</tbody></table>`;
+    container.innerHTML=html;
+  }
+  const total = getCart().reduce((sum,i)=>sum+i.price*i.qty,0);
+  document.getElementById('cart-total').textContent=`COP $${total.toLocaleString()}`;
+}
+function changeQty(id, delta){
+  const cart = getCart();
+  const item = cart.find(c=>c.id===id);
+  if(!item) return;
+  item.qty += delta;
+  if(item.qty <1) item.qty=1;
+  saveCart(cart);
+  renderCartContents();
+  updateCartBadge();
+}
+function removeItem(id){
+  let cart = getCart();
+  cart = cart.filter(c=>c.id!==id);
+  saveCart(cart);
+  renderCartContents();
+  updateCartBadge();
+}
+function clearCart(){
+  if(!confirm('¿Vaciar el carrito?')) return;
+  localStorage.removeItem('ss_cart');
+  renderCartContents();
+  updateCartBadge();
+}
+
+// recibos
+function generateReceiptHTML(sale){
+  let itemsHtml = sale.items.map(i=>`
+    <tr>
+      <td style="padding:6px;border:1px solid #f0d6e7;">${i.name}</td>
+      <td style="padding:6px;border:1px solid #f0d6e7;text-align:center;">${i.qty}</td>
+      <td style="padding:6px;border:1px solid #f0d6e7;text-align:right;">COP $${i.price.toLocaleString()}</td>
+      <td style="padding:6px;border:1px solid #f0d6e7;text-align:right;">COP $${(i.price*i.qty).toLocaleString()}</td>
+    </tr>`).join('');
+  const receipt = `
+    <!DOCTYPE html><html lang="es"><head><meta charset="UTF-8"/><title>Recibo ${sale.id}</title>
+    <style>body{font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;background:#fff7fc;padding:20px;color:#2c2c38;}
+    .card{max-width:700px;margin:auto;background:#fff;padding:20px;border-radius:12px;box-shadow:0 12px 40px -5px rgba(255,111,167,0.2);}
+    h2{margin-top:0;color:#ff6fa7;}table{width:100%;border-collapse:collapse;margin-top:10px;font-size:14px;}
+    th{background:#ffe3ee;color:#2c2c38;padding:8px;border:1px solid #f0d6e7;}td{padding:6px;border:1px solid #f0d6e7;}
+    .total{font-weight:700;font-size:16px;margin-top:10px;text-align:right;}.small{font-size:12px;color:#555;margin-top:8px;}</style>
+    </head><body><div class="card">
+    <h2>Recibo de venta - SweetScoop</h2>
+    <div><strong>ID:</strong> ${sale.id}</div>
+    <div><strong>Fecha/Hora:</strong> ${sale.datetime}</div>
+    <div style="margin-top:8px;">
+      <table><thead><tr><th>Sabor</th><th>Cantidad</th><th>Precio</th><th>Subtotal</th></tr></thead>
+      <tbody>${itemsHtml}</tbody></table>
+    </div>
+    <div class="total">Total: COP $${sale.total.toLocaleString()}</div>
+    <div class="small">Gracias por endulzar el día con nosotros. ❤️</div>
+    </div></body></html>`;
+  return receipt;
+}
+function printReceipt(sale){
+  const html = generateReceiptHTML(sale);
+  const w = window.open();
+  if(!w){ alert('Activa ventanas emergentes.'); return; }
+  w.document.write(html);
+  w.document.close();
+  w.focus();
+  w.print();
+}
+function printItemReceipt(id){
+  const cart = getCart();
+  const item = cart.find(i=>i.id===id);
+  if(!item) return;
+  const sale = { id:'R'+Date.now(), datetime:new Date().toLocaleString('es-CO',{timeZone:'America/Bogota'}), items:[{...item}], total:item.price*item.qty };
+  printReceipt(sale);
+}
+
+// checkout
+function checkout(){
+  const cart = getCart();
+  if(cart.length===0){ alert('Carrito vacío.'); return; }
+  const total = cart.reduce((s,i)=>s+i.price*i.qty,0);
+  const sale = { id:'V'+Date.now(), datetime:new Date().toLocaleString('es-CO',{timeZone:'America/Bogota'}), items:cart, total:parseFloat(total.toFixed(2)) };
+  const sales = getSales();
+  sales.unshift(sale);
+  saveSales(sales);
+  localStorage.removeItem('ss_cart');
+  updateCartBadge();
+  renderCartContents();
+  alert(`Venta registrada: ${sale.id} - Total: COP $${sale.total.toLocaleString()}`);
+  if(confirm('¿Deseas imprimir el recibo ahora?')) printReceipt(sale);
+}
+
+// ventas log
+function openSalesLog(){ renderSalesLog(); document.getElementById('sales-log').style.display='block'; }
+function closeSalesLog(){ document.getElementById('sales-log').style.display='none'; }
+function renderSalesLog(){
+  const container = document.getElementById('sales-contents');
+  const sales = getSales();
+  if(sales.length===0){ container.innerHTML='<p>No hay ventas registradas.</p>'; return; }
+  let html = '';
+  sales.forEach(sale=>{
+    const encoded = encodeURIComponent(JSON.stringify(sale));
+    html+=`
+      <div style="background:rgba(255,230,240,0.6); padding:12px; border-radius:10px; margin-bottom:10px;">
+        <div><strong>ID:</strong> ${sale.id} | <strong>Fecha:</strong> ${sale.datetime}</div>
+        <div><strong>Total:</strong> COP $${sale.total.toLocaleString()}</div>
+        <div style="margin-top:6px;">
+          <table>
+            <thead><tr><th>Sabor</th><th>Cantidad</th><th>Precio</th><th>Subtotal</th></tr></thead>
+            <tbody>
+              ${sale.items.map(i=>`
+                <tr>
+                  <td>${i.name}</td>
+                  <td>${i.qty}</td>
+                  <td>COP $${i.price.toLocaleString()}</td>
+                  <td>COP $${(i.price*i.qty).toLocaleString()}</td>
+                </tr>`).join('')}
+            </tbody>
+          </table>
+        </div>
+        <div style="margin-top:6px; display:flex; gap:8px; flex-wrap:wrap;">
+          <button class="btn-primary" onclick="printReceipt(JSON.parse(decodeURIComponent('${encoded}')))">Imprimir recibo</button>
+        </div>
+      </div>`;
+  });
+  container.innerHTML=html;
+}
+function clearSalesLog(){ if(!confirm('¿Borrar todo el historial de ventas?')) return; localStorage.removeItem('ss_sales'); renderSalesLog(); }
+function downloadSalesLog(){ const sales = localStorage.getItem('ss_sales')||'[]'; const blob=new Blob([sales],{type:'application/json'}); const url=URL.createObjectURL(blob); const a=document.createElement('a'); a.href=url; a.download='ventas_sweetscoop.json'; a.click(); URL.revokeObjectURL(url); }
+
+// admin panel
+function toggleAdmin(){
+  const panel = document.getElementById('admin-panel');
+  panel.style.display = panel.style.display === 'block' ? 'none' : 'block';
+  renderAdminProducts();
+}
+function renderAdminProducts(){
+  const container = document.getElementById('admin-contents');
+  let html = `<h3>Sabores</h3><table>
+    <thead><tr><th>ID</th><th>Nombre</th><th>Precio (COP)</th><th>Categoría</th><th>Acciones</th></tr></thead><tbody>`;
+  products.forEach(p=>{
+    html+=`<tr>
+      <td>${p.id}</td>
+      <td contenteditable="true" onblur="editProduct(${p.id}, 'name', this.textContent)">${p.name}</td>
+      <td contenteditable="true" onblur="editProduct(${p.id}, 'price', this.textContent.replace(/[^0-9]/g,''))">COP $${p.price.toLocaleString()}</td>
+      <td contenteditable="true" onblur="editProduct(${p.id}, 'category', this.textContent)">${p.category}</td>
+      <td><button class="btn-secondary" onclick="removeProduct(${p.id})">Eliminar</button></td>
+    </tr>`;
+  });
+  html+=`</tbody></table>`;
+  container.innerHTML=html;
+}
+function editProduct(id, field, value){
+  const prod = products.find(p=>p.id===id);
+  if(!prod) return;
+  if(field==='price'){
+    const num = parseInt(value.replace(/\D/g,''),10);
+    if(!isNaN(num)) prod.price = num;
+  } else if(field==='name'){
+    prod.name = value.trim();
+  } else if(field==='category'){
+    prod.category = value.trim();
+  }
+  renderProducts();
+}
+function removeProduct(id){
+  const idx = products.findIndex(p=>p.id===id);
+  if(idx===-1) return;
+  if(!confirm('Eliminar sabor?')) return;
+  products.splice(idx,1);
+  renderAdminProducts();
+  renderProducts();
+}
+
+// impacto modal
+function openImpact(){
+  document.getElementById('impact-modal').style.display='block';
+  renderImpactChart();
+}
+function closeImpact(){
+  document.getElementById('impact-modal').style.display='none';
+}
+function renderImpactChart(){
+  const sales = getSales();
+  const totalSales = sales.reduce((s,v)=>s+v.total,0);
+  const donation = totalSales * 0.1;
+  const income = totalSales - donation;
+  const canvas = document.getElementById('impact-chart');
+  const ctx = canvas.getContext('2d');
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  const radius = Math.min(canvas.width, canvas.height)/2 - 10;
+  const centerX = canvas.width/2;
+  const centerY = canvas.height/2;
+  const donationAngle = (donation / (totalSales||1)) * Math.PI * 2;
+  // Donación
+  ctx.beginPath();
+  ctx.moveTo(centerX, centerY);
+  ctx.fillStyle = 'var(--primary)';
+  ctx.arc(centerX, centerY, radius, 0, donationAngle);
+  ctx.closePath();
+  ctx.fill();
+  // Ingreso restante
+  ctx.beginPath();
+  ctx.moveTo(centerX, centerY);
+  ctx.fillStyle = 'var(--accent)';
+  ctx.arc(centerX, centerY, radius, donationAngle, Math.PI*2);
+  ctx.closePath();
+  ctx.fill();
+  // Centro
+  ctx.beginPath();
+  ctx.fillStyle = '#fff7fc';
+  ctx.arc(centerX, centerY, radius * 0.5, 0, Math.PI*2);
+  ctx.fill();
+  // Texto
+  ctx.fillStyle = '#2c2c38';
+  ctx.font = '13px system-ui';
+  ctx.textAlign='center';
+  ctx.fillText('Ventas totales', centerX, centerY - 8);
+  ctx.font='bold 15px system-ui';
+  ctx.fillText(`COP $${totalSales.toLocaleString()}`, centerX, centerY + 12);
+  document.getElementById('impact-values').innerHTML = `
+    <div><strong>Donación (10%):</strong> COP $${donation.toLocaleString()}</div>
+    <div><strong>Ingreso neto:</strong> COP $${income.toLocaleString()}</div>
+  `;
+}
+
+// navegación
+function scrollToSection(id){
+  const el = document.getElementById(id);
+  if(el) el.scrollIntoView({behavior:'smooth'});
+}
+
+// inicialización
+renderProducts();
+updateCartBadge();
+renderSalesLog();
+</script>
+
+</body>
+</html>

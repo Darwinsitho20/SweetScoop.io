@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Fresas con Crema - SweetScoop</title>
+<style>
+  :root {
+    --primary:#ff6fa7;
+    --secondary:#ffd1e0;
+    --accent:#8de0c1;
+    --bg:#fff7fc;
+    --radius:14px;
+    --shadow:0 20px 60px -10px rgba(255,111,167,0.3);
+    font-family: 'Poppins', system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+  }
+  *{box-sizing:border-box;}
+  body {
+    margin:0;
+    background:linear-gradient(135deg,#fff7fc 0%,#ffe7f0 90%);
+    color:#3a2c45;
+    min-height:100vh;
+    line-height:1.4;
+  }
+  header{
+    padding:1rem 1.25rem;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    background:#ffffffdd;
+    position:sticky;
+    top:0;
+    gap:10px;
+    box-shadow:0 8px 30px -5px rgba(0,0,0,0.08);
+    border-bottom:2px solid var(--primary);
+    flex-wrap:wrap;
+  }
+  .logo{
+    font-weight:700;
+    font-size:1.4rem;
+    color: var(--primary);
+    display:flex;
+    align-items:center;
+    gap:6px;
+  }
+  .logo .dot{background:var(--primary);width:10px;height:10px;border-radius:50%;display:inline-block;}
+  .subtitle{font-size:0.9rem; color:#555;}
+  .catalog-title{
+    text-align:center;
+    margin:1rem 0 0.25rem;
+    font-size:2rem;
+    font-weight:700;
+    background: linear-gradient(90deg,var(--primary),var(--accent));
+    -webkit-background-clip:text;
+    -webkit-text-fill-color:transparent;
+  }
+  .hero{
+    padding:1rem 1.25rem;
+    max-width:1100px;
+    margin:0 auto;
+    display:grid;
+    grid-template-columns:1fr auto;
+    gap:24px;
+    align-items:start;
+  }
+  .description{
+    background:rgba(255,241,249,0.9);
+    border-radius:12px;
+    padding:16px 18px;
+    box-shadow:var(--shadow);
+    position:relative;
+  }
+  .products-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+    gap:18px;
+    margin-top:12px;
+  }
+  .product-card{
+    background:#fff;
+    border-radius:16px;
+    padding:14px;
+    box-shadow:0 25px 55px -10px rgba(255,111,167,0.2);
+    position:relative;
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+    border:1px solid rgba(255,111,167,0.2);
+  }
+  .product-card img{
+    width:100%;
+    border-radius:12px;
+    object-fit:cover;
+    aspect-ratio:1/1;
+  }
+  .product-info{
+    flex:1;
+    display:flex;
+    flex-direction:column;
+    gap:6px;
+  }
+  .product-info h3{
+    margin:0;
+    font-size:1.2rem;
+  }
+  .price{
+    font-weight:700;
+    font-size:1rem;
+    color:#d6336c;
+  }
+  .variant{
+    font-size:0.8rem;
+    background:var(--secondary);
+    padding:4px 10px;
+    border-radius:999px;
+    display:inline-block;
+    margin-bottom:4px;
+    color:#8a0f68;
+  }
+  .actions{
+    display:flex;
+    gap:8px;
+    flex-wrap:wrap;
+    align-items:center;
+    margin-top:auto;
+  }
+  .qty-wrap{
+    display:flex;
+    align-items:center;
+    gap:6px;
+    font-size:0.9rem;
+  }
+  .qty-btn{
+    background:var(--primary);
+    border:none;
+    color:#fff;
+    padding:6px 10px;
+    border-radius:8px;
+    cursor:pointer;
+    font-weight:700;
+    min-width:32px;
+    line-height:1;
+  }
+  .add-btn{
+    background:var(--accent);
+    border:none;
+    padding:10px 16px;
+    border-radius:999px;
+    cursor:pointer;
+    font-weight:600;
+    flex:1;
+    display:inline-flex;
+    justify-content:center;
+    align-items:center;
+    gap:6px;
+    transition:0.2s;
+    color:#0f111a;
+  }
+  .add-btn:hover{filter:brightness(1.05);}
+  .cart{
+    position:sticky;
+    top:100px;
+    background:#ffe7f7;
+    border:2px solid var(--primary);
+    border-radius:16px;
+    padding:16px;
+    min-width:260px;
+    max-width:320px;
+    display:flex;
+    flex-direction:column;
+    gap:12px;
+    box-shadow:0 30px 70px -10px rgba(255,111,167,0.25);
+  }
+  .cart h4{
+    margin:0;
+    font-size:1.2rem;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:6px;
+  }
+  .cart-list{
+    max-height:320px;
+    overflow:auto;
+    display:flex;
+    flex-direction:column;
+    gap:8px;
+  }
+  .cart-item{
+    background:#fff;
+    border-radius:10px;
+    padding:8px 10px;
+    display:flex;
+    gap:10px;
+    align-items:center;
+    border:1px solid rgba(255,111,167,0.3);
+    font-size:0.9rem;
+  }
+  .cart-item .info{
+    flex:1;
+    display:flex;
+    flex-direction:column;
+    gap:4px;
+  }
+  .cart-item .remove{
+    background:none;
+    border:none;
+    cursor:pointer;
+    color:#d6336c;
+    font-weight:700;
+    font-size:0.9rem;
+  }
+  .total-row{
+    display:flex;
+    justify-content:space-between;
+    font-weight:700;
+    font-size:1rem;
+    padding-top:6px;
+    border-top:1px dashed rgba(0,0,0,0.1);
+  }
+  .cart-actions{
+    display:flex;
+    gap:8px;
+    flex-wrap:wrap;
+    margin-top:6px;
+  }
+  .small-btn{
+    background:none;
+    border:2px solid var(--primary);
+    padding:8px 12px;
+    border-radius:8px;
+    cursor:pointer;
+    font-weight:600;
+    flex:1;
+    min-width:120px;
+  }
+  .checkout{
+    background:var(--primary);
+    color:#fff;
+    border:none;
+    padding:10px 14px;
+    border-radius:999px;
+    cursor:pointer;
+    font-weight:700;
+    flex:1;
+    min-width:120px;
+  }
+  .empty{
+    text-align:center;
+    font-size:0.9rem;
+    color:#7a5a7f;
+    padding:12px 6px;
+    background:rgba(255,250,253,1);
+    border-radius:8px;
+  }
+  @media (max-width:1000px){
+    .hero{grid-template-columns:1fr;}
+    .cart{position:relative; top:0; width:100%; max-width:none;}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">SweetScoop <div class="dot"></div></div>
+  <div class="subtitle">Catálogo interactivo: Fresa con crema</div>
+</header>
+
+<main class="hero">
+  <div>
+    <div class="catalog-title">Fresas con Crema</div>
+    <div class="description">
+      <p>Elige tu versión favorita de <strong>Fresa con crema</strong>. Tres estilos, precios claros en pesos colombianos. Agrega, ajusta cantidad y revisa en el carrito.</p>
+      <div class="products-grid" id="products-grid">
+        <!-- cards se inyectan por JS -->
+      </div>
+    </div>
+  </div>
+  <aside class="cart" aria-label="Carrito de compras">
+    <h4>Carrito <span id="badge" style="background:#ff6fa7;color:#fff;border-radius:50%;padding:4px 8px;font-size:0.7rem;margin-left:6px;">0</span></h4>
+    <div class="cart-list" id="cart-list">
+      <div class="empty">Aún no has agregado nada.</div>
+    </div>
+    <div class="total-row">
+      <div>Total:</div>
+      <div id="total-display">COP $0</div>
+    </div>
+    <div class="cart-actions">
+      <button class="small-btn" onclick="clearCart()">Vaciar</button>
+      <button class="checkout" onclick="checkout()">Registrar venta</button>
+    </div>
+    <div style="font-size:0.65rem; margin-top:4px;">Los datos se guardan localmente en el navegador.</div>
+  </aside>
+</main>
+
+<script>
+// Tres variantes de fresa con crema
+const products = [
+  {
+    id: 101,
+    name: "Fresa con Crema Clásica",
+    description: "Fresas frescas, helado cremoso y crema batida rosa.",
+    price: 12000,
+    img: "https://www.cocinadelirante.com/sites/default/files/images/2020/03/helado-de-fresas-con-crema-y-leche-condensada.jpg",
+    variant: "Clásica"
+  },
+  {
+    id: 102,
+    name: "Fresa con Crema y Chispas",
+    description: "Añadimos chispas de chocolate y crema extra.",
+    price: 14000,
+    img: "https://scontent.feoh12-2.fna.fbcdn.net/v/t39.30808-6/514750895_1265355765381179_7294124588127529574_n.jpg?_nc_cat=110&ccb=1-7&_nc_sid=127cfc&_nc_eui2=AeHTQOkRS82kcSCXbgOvp__t_CGgJWdsDWD8IaAlZ2wNYAY2tkomdKFZdBM5fni8MQjsiRGqJatoXfWZKoQCAFPs&_nc_ohc=IDcu2xKeLNwQ7kNvwGH53cx&_nc_oc=AdloBDogCGp5IXGGYiYCCo3XuTT7m8ReNTqMqJnNOZKx4nrHp3M1njTstulXIq9bquI&_nc_pt=1&_nc_zt=23&_nc_ht=scontent.feoh12-2.fna&_nc_gid=g8Cct_dQrz04sOb2KNeWQA&oh=00_AfX1ryXFNr74GJw612vPyaZZbpTefu4hZgmjNAxmnkOoNQ&oe=68972C16",
+    variant: "Con chispas"
+  },
+  {
+    id: 103,
+    name: "Fresa con Crema XL",
+    description: "Porción grande con doble crema y fresa premium.",
+    price: 18000,
+    img: "https://www.goodnes.com/sites/g/files/jgfbjl321/files/srh_recipes/b7d9ee5ae9863b4637868ea579e24a91.jpg",
+    variant: "XL"
+  }
+];
+
+// Persistencia
+function getCart(){ return JSON.parse(localStorage.getItem('fresa_cart')||'[]'); }
+function saveCart(c){ localStorage.setItem('fresa_cart', JSON.stringify(c)); }
+function updateBadge(){
+  const cart = getCart();
+  const count = cart.reduce((s,i)=>s+i.qty,0);
+  document.getElementById('badge').textContent = count;
+}
+
+// Render productos
+function renderProducts(){
+  const grid = document.getElementById('products-grid');
+  grid.innerHTML = '';
+  products.forEach(p => {
+    const card = document.createElement('div');
+    card.className='product-card';
+    card.innerHTML = `
+      <img src="${p.img}" alt="${p.name}" loading="lazy" />
+      <div class="product-info">
+        <div class="variant">${p.variant}</div>
+        <h3>${p.name}</h3>
+        <div class="price">COP $${p.price.toLocaleString()}</div>
+        <div style="font-size:0.85rem; color:#5a3d6b;">${p.description}</div>
+      </div>
+      <div class="actions">
+        <div class="qty-wrap">
+          <button class="qty-btn" aria-label="Disminuir" onclick="changeTempQty(${p.id}, -1)">−</button>
+          <div id="temp-${p.id}" style="min-width:28px; text-align:center;">1</div>
+          <button class="qty-btn" aria-label="Aumentar" onclick="changeTempQty(${p.id}, 1)">+</button>
+        </div>
+        <button class="add-btn" onclick="addToCart(${p.id})">Agregar <span style="margin-left:4px;">➕</span></button>
+      </div>
+    `;
+    grid.appendChild(card);
+  });
+}
+
+// temporales para cantidad antes de agregar
+const tempQty = {};
+products.forEach(p=> tempQty[p.id]=1);
+function changeTempQty(id, delta){
+  tempQty[id] = Math.max(1, (tempQty[id]||1) + delta);
+  document.getElementById(`temp-${id}`).textContent = tempQty[id];
+}
+
+// Carrito
+function addToCart(id){
+  const cart = getCart();
+  const prod = products.find(p=>p.id===id);
+  if(!prod) return;
+  const qty = tempQty[id] || 1;
+  const existing = cart.find(c=>c.id===id);
+  if(existing) existing.qty += qty;
+  else cart.push({id:prod.id,name:prod.name,price:prod.price,qty:qty});
+  saveCart(cart);
+  renderCart();
+}
+
+function renderCart(){
+  const container = document.getElementById('cart-list');
+  const cart = getCart();
+  if(cart.length===0){
+    container.innerHTML = `<div class="empty">Aún no has agregado nada.</div>`;
+  } else {
+    container.innerHTML = '';
+    cart.forEach(item=>{
+      const row = document.createElement('div');
+      row.className='cart-item';
+      row.innerHTML=`
+        <div class="info">
+          <div><strong>${item.name}</strong></div>
+          <div>Cantidad: 
+            <button class="qty-btn" style="padding:4px 8px; font-size:0.75rem;" onclick="updateQty(${item.id}, -1)">−</button>
+            ${item.qty}
+            <button class="qty-btn" style="padding:4px 8px; font-size:0.75rem;" onclick="updateQty(${item.id}, 1)">+</button>
+          </div>
+          <div>Subtotal: COP $${(item.price * item.qty).toLocaleString()}</div>
+        </div>
+        <div>
+          <button class="remove" aria-label="Eliminar" onclick="removeItem(${item.id})">✕</button>
+        </div>
+      `;
+      container.appendChild(row);
+    });
+  }
+  updateTotals();
+  updateBadge();
+}
+
+function updateQty(id, delta){
+  const cart = getCart();
+  const item = cart.find(i=>i.id===id);
+  if(!item) return;
+  item.qty = Math.max(1, item.qty + delta);
+  saveCart(cart);
+  renderCart();
+}
+function removeItem(id){
+  let cart = getCart();
+  cart = cart.filter(i=>i.id!==id);
+  saveCart(cart);
+  renderCart();
+}
+function clearCart(){
+  if(!confirm('¿Vaciar carrito?')) return;
+  localStorage.removeItem('fresa_cart');
+  renderCart();
+}
+function updateTotals(){
+  const cart = getCart();
+  const total = cart.reduce((s,i)=>s + i.price * i.qty, 0);
+  document.getElementById('total-display').textContent = `COP $${total.toLocaleString()}`;
+}
+
+function checkout(){
+  const cart = getCart();
+  if(cart.length === 0){
+    alert('El carrito está vacío.');
+    return;
+  }
+  const total = cart.reduce((s,i)=>s + i.price * i.qty, 0);
+  alert(`Venta registrada. Total: COP $${total.toLocaleString()}`);
+  // aquí podrías extender para guardar historial o imprimir recibo
+  clearCart();
+}
+
+// inicialización
+renderProducts();
+renderCart();
+</script>
+
+</body>
+</html>
